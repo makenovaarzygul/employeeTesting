@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="rus">
+    {% load static %}
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Новый вопросы</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        input,
+        textarea:focus {
+            box-shadow: none !important;
+        }
+        
+        h2 {
+            width: fit-content;
+            margin: 0px auto;
+            padding: 7px 20px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        footer{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+        @media only screen and (max-width: 600px){
+            footer{
+                position:static;
+                width: auto;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ===============Header================ -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="\">С.О.Т</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link " aria-current="page" href="{% url 'viewquestions' %}">Посмотреть вопросы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'newquestion' %}">Добавить вопросы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    {% comment %} =================Main================= {% endcomment %}
+    <form action="{% url 'savequestion' %}" method="post" class="w-50 m-auto mt-5 form-width">
+        {% csrf_token %}
+        <h2 class="h2 bg-warning ">Добавить новый вопрос</h2>
+        <div class="mb-3">
+            <label for="textarea" class="form-label">Описание вопроса </label>
+            <textarea name="question" class="form-control" id="textarea" placeholder="Question Statement"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="option1" class="form-label">Вариант A</label>
+            <input type="text" class="form-control" id="option1" name="optiona" />
+        </div>
+        <div class="mb-3">
+            <label for="option2" class="form-label">Вариант B</label>
+            <input type="text" name="optionb" class="form-control" id="option2" />
+        </div>
+        <div class="mb-3">
+            <label for="option3" class="form-label">Option C</label>
+            <input type="text" name="optionc" id="option3" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label for="option4" class="form-label">Вариант D</label>
+            <input type="text" name="optiond" id="option4" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <select class="form-select" aria-label="Default select example" name="answer">
+                <option selected>Выберите один вариант</option>
+                <option value="a">A</option>
+                <option value="b">B</option>
+                <option value="c">C</option>
+                <option value="d">D</option>
+              </select>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="save">
+        </div>
+    </form>
+    <footer >
+        <span>&copy; All right reserd Arzygul</span>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>

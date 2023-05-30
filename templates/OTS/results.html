@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="rus">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>С.О.Т.</title>
+    <style>
+      .result-title {
+        width: max-content;
+        border: 2px solid #0d9aaf;
+        padding: 10px 20px;
+        font-family: monospace;
+      }
+      table{
+          text-align: center;
+      }
+      @media only screen and (max-width: 600px) {
+        .table {
+          width: 100% !important;
+        }
+        .result-title{
+            font-size: 1rem;
+        }
+      }
+      footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ===============Header================ -->
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">С.О.Т.</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'starttest' %}"
+                  >Начать тестирование</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  href="{% url 'userresults' %}"
+                  >Результаты</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}"
+                  >Выйти</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- =================Main=================== -->
+    <main class="mt-2">
+      <section class="p-2 p-sm-5">
+        <div>
+          <h3 class="h3 result-title m-auto rounded mb-3">
+           Все результаты 
+          </h3>
+        </div>
+        <table class="table table-success table-striped m-auto w-50 rounded">
+          <thead>
+            <th>№</th>
+            <th>Отметки вопросов</th>
+            <th>Правильные ответы</th>
+            <th>Неправильные ответы</th>
+            <th>Дата</th>
+          </thead>
+          {% for r in result%}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{r.total_attempt}}</td>
+            <td>{{r.total_right}}</td>
+            <td>{{r.total_wrong}}</td>
+            <td>{{r.date | date}}</td>
+          </tr>
+          {% endfor%}
+        </table>
+      </section>
+    </main>
+
+    <footer>
+      <span>&copy; All right reserd Arzygul</span>
+    </footer>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
