@@ -1,6 +1,8 @@
 from unicodedata import name
 from django.urls import path
 from OTS.views import *
+from .views import printResults
+
 urlpatterns = [
     path('',ots,name='home'),
     path('new-question',newQuestion,name='newquestion'),
@@ -18,4 +20,6 @@ urlpatterns = [
     path('start-test',startTest ,name='starttest'),
     path('submit-test',submitTest ,name='submittest'),
     path('user-results',userResults , name='userresults'),
+    path('admin-results', adminResults, name='adminresults'),
+    path('print-results', printResults, name='printresults'),
 ]

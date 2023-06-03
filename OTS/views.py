@@ -5,6 +5,112 @@ from OTS.models import Question, User,Result
 import random as ran
 from django.shortcuts import redirect
 from .models import Question
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle, TA_CENTER
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle, TA_CENTER
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from django.http import HttpResponse
+from .models import Result
+from django.shortcuts import render
+from django.http import HttpResponse
+from OTS.models import Result
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from datetime import datetime
+
+def printResults(request):
+    # Получение результатов из базы данных
+    results = Result.objects.all()
+
+    # Создание HTTP-ответа с типом содержимого PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="results.pdf"'
+
+    # Создание объекта PDF-документа
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    
+
+    # Настройка шрифта для поддержки русского языка
+    pdfmetrics.registerFont(TTFont('TimesNewRoman', 'OTS/TimesNewRoman/timesnewroman2.ttf'))
+
+
+    # Настройка содержимого документа
+    content = []
+
+    # Определение стилей
+    styles = getSampleStyleSheet()
+
+    # Стиль заголовка документа
+    heading_style = ParagraphStyle(
+        name='CustomHeading',
+        fontName='TimesNewRoman',
+        fontSize=14,
+        alignment=TA_CENTER,
+        spaceAfter=12,
+        textColor='#0000FF',
+        backColor='#CCCCCC'
+    )
+    styles.add(heading_style)
+
+    # Стиль заголовка таблицы
+    table_header_style = [
+        ('BACKGROUND', (0, 0), (-1, 0), '#CCCCCC'),
+        ('TEXTCOLOR', (0, 0), (-1, 0), '#000000'),
+        ('FONTNAME', (0, 0), (-1, 0), 'TimesNewRoman'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+    ]
+
+    # Стиль ячеек таблицы
+    table_cell_style = [
+        ('BACKGROUND', (0, 0), (-1, -1), '#FFFFFF'),
+        ('TEXTCOLOR', (0, 0), (-1, -1), '#000000'),
+        ('FONTNAME', (0, 0), (-1, -1), 'TimesNewRoman'),
+        ('FONTSIZE', (0, 0), (-1, -1), 12),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),  # Добавленный параметр для увеличения интервала
+]
+    # Заголовок
+    content.append(Paragraph("РЕЗУЛЬТАТЫ", styles['CustomHeading']))
+
+    # Отображение таблицы результатов
+    table_data = [
+        ['пользователь', 'попытки', 'правильно', 'неправильно', 'дата']
+    ]
+    for result in results:
+        user = result.user.username
+        total_attempts = str(result.total_attempt)
+        total_correct = str(result.total_right)
+        total_wrong = str(result.total_wrong)
+        date = result.date.strftime("%Y-%m-%d")
+        row = [user, total_attempts, total_correct, total_wrong, date]
+        table_data.append(row)
+
+    table = Table(table_data)
+
+    # Применение стилей к заголовку таблицы
+    table.setStyle(TableStyle(table_header_style))
+
+    # Применение стилей к ячейкам таблицы
+    for i in range(1, len(table_data)):
+        if i % 2 == 0:
+            cell_style = table_cell_style + [('BACKGROUND', (0, i), (-1,i), '#F0F0F0')]
+        else:
+            cell_style = table_cell_style
+        table.setStyle(TableStyle(cell_style))
+
+    content.append(table)
+
+    # Build the document content and save it
+    doc.build(content)
+
+    return response
 
 # Create your views here.
 # admin user
@@ -235,4 +341,10 @@ def deleteQuestion(request):
     question.delete()
     return HttpResponseRedirect('/view-questions')
 
-
+def adminResults(request):
+    try:
+        if request.session['role'] == 'ADMIN':
+            results = Result.objects.all()
+            return render(request, 'OTS/admin_results.html', {'results': results})
+    except KeyError:
+        return HttpResponseRedirect('/login')

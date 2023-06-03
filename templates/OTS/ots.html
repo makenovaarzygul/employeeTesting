@@ -38,6 +38,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'newquestion' %}">Добавить вопросы</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'adminresults' %}">Результаты для админа</a>
+                        </li>
+                        
                         {% endif %} {% if request.session.role == "LEARNER" %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'starttest' %}">Начать тест</a>
@@ -46,7 +50,7 @@
                             <a class="nav-link" href="{% url 'userresults' %}">Результаты</a>
                         </li>
                         {% endif %} {% if request.session.fullname %}
-
+                       
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
                         </li>

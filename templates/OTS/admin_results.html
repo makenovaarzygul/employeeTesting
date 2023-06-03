@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="rus">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+    />
+    <title>Результаты админа</title>
+</head>
+<body>
+    <div class="container mt-3">
+        <h3 class="mb-3">Результаты админа</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Попытки</th>
+                    <th>Правильные ответы</th>
+                    <th>Неправильные ответы</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.user.username }}</td>
+                    <td>{{ result.total_attempt }}</td>
+                    <td>{{ result.total_right }}</td>
+                    <td>{{ result.total_wrong }}</td>
+                    <td>{{ result.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container mt-3">
+        <h3 class="mb-3">Результаты админа</h3>
+        <table class="table table-striped">
+            <!-- Таблица с результатами -->
+        </table>
+      <a href="{% url 'printresults' %}" class="btn btn-primary">Печать</a>
+    </div>
+</body>
+</html>
